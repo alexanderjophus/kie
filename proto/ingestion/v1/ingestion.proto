@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package ingestion.v1;
+
+option go_package = "github.com/alexanderjophus/kie/gen/ingestion/v1;ingestionv1";
+
+service IngestionService {
+    rpc AddFile(AddFileRequest) returns (AddFileResponse) {}
+}
+
+message AddFileRequest {
+    string link = 1;
+}
+
+message AddFileResponse {}
