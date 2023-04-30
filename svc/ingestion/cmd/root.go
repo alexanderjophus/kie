@@ -9,7 +9,7 @@ import (
 	"os"
 
 	"github.com/alexanderjophus/kie/gen/ingestion/v1/ingestionv1connect"
-	"github.com/alexanderjophus/kie/svc/ingestion/cmd/pkg"
+	"github.com/alexanderjophus/kie/svc/ingestion/pkg"
 	"github.com/pachyderm/pachyderm/v2/src/client"
 	"github.com/pachyderm/pachyderm/v2/src/pfs"
 	"github.com/spf13/cobra"
