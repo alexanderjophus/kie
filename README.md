@@ -12,6 +12,15 @@ ChatGPT helped breakdown the problem into 4 major steps
 
 ## Outline
 
+```mermaid
+graph LR
+
+    A[Ingestion] --> B[Data Cleaner]
+    B --> C[Feature Extraction]
+    C --> D(???)
+    D --> E[API serving model]
+```
+
 ### Data Ingestion
 
 We expose a gRPC/REST API to allow us to control what data we're processing.
