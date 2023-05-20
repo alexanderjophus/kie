@@ -11,9 +11,14 @@ import (
 	"github.com/bufbuild/connect-go"
 )
 
+type URL string
+
 const (
 	RepoName = "statsapi"
-	baseURL  = "https://statsapi.web.nhl.com"
+
+	statsURL   URL = "https://statsapi.web.nhl.com"
+	recordsURL URL = "https://records.nhl.com"
+	nhleURL    URL = "https://api.nhle.com"
 )
 
 // A Server is a server
@@ -37,17 +42,16 @@ func NewServer(fs FileStorer) *Server {
 	}
 }
 
-// addFile handles /addFile endpoint
 func (s *Server) AddFile(ctx context.Context, req *connect.Request[ingestionv1.AddFileRequest]) (*connect.Response[ingestionv1.AddFileResponse], error) {
-	err := s.linkStorer(req.Msg.Link)
+	err := s.linkStorer(statsURL, req.Msg.Link)
 	if err != nil {
 		return nil, fmt.Errorf("unable to store file: %w", err)
 	}
 	return &connect.Response[ingestionv1.AddFileResponse]{}, nil
 }
 
-func (s *Server) linkStorer(link string) error {
-	r, err := s.c.Get(baseURL + link)
+func (s *Server) linkStorer(baseURL URL, link string) error {
+	r, err := s.c.Get(string(baseURL) + link)
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -64,4 +68,16 @@ func (s *Server) linkStorer(link string) error {
 	}
 
 	return nil
+}
+
+func (s *Server) AddPlayer(ctx context.Context, req *connect.Request[ingestionv1.AddPlayerRequest]) (*connect.Response[ingestionv1.AddPlayerResponse], error) {
+	// api/v1/people/ID
+	if err := s.linkStorer(statsURL, fmt.Sprintf("/api/v1/people/%s/stats?stats=yearByYear", req.Msg.Id)); err != nil {
+		return nil, fmt.Errorf("unable to store yby file: %w", err)
+	}
+	if err := s.linkStorer(nhleURL, fmt.Sprintf("/stats/rest/en/skater/bios?cayenneExp=playerId=%s", req.Msg.Id)); err != nil {
+		return nil, fmt.Errorf("unable to store draft file: %w", err)
+	}
+
+	return &connect.Response[ingestionv1.AddPlayerResponse]{}, nil
 }

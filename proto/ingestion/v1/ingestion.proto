@@ -5,7 +5,13 @@ package ingestion.v1;
 option go_package = "github.com/alexanderjophus/kie/gen/ingestion/v1;ingestionv1";
 
 service IngestionService {
+    // add a given file to the ingestion queue
     rpc AddFile(AddFileRequest) returns (AddFileResponse) {}
+    // add a given player to the ingestion queue
+    // files included automatically are;
+    // - draft information
+    // - yearByYear information
+    rpc AddPlayer(AddPlayerRequest) returns (AddPlayerResponse) {}
 }
 
 message AddFileRequest {
@@ -13,3 +19,9 @@ message AddFileRequest {
 }
 
 message AddFileResponse {}
+
+message AddPlayerRequest {
+    string id = 1;
+}
+
+message AddPlayerResponse {}

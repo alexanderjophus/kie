@@ -36,11 +36,15 @@ const (
 	// IngestionServiceAddFileProcedure is the fully-qualified name of the IngestionService's AddFile
 	// RPC.
 	IngestionServiceAddFileProcedure = "/ingestion.v1.IngestionService/AddFile"
+	// IngestionServiceAddPlayerProcedure is the fully-qualified name of the IngestionService's
+	// AddPlayer RPC.
+	IngestionServiceAddPlayerProcedure = "/ingestion.v1.IngestionService/AddPlayer"
 )
 
 // IngestionServiceClient is a client for the ingestion.v1.IngestionService service.
 type IngestionServiceClient interface {
 	AddFile(context.Context, *connect_go.Request[v1.AddFileRequest]) (*connect_go.Response[v1.AddFileResponse], error)
+	AddPlayer(context.Context, *connect_go.Request[v1.AddPlayerRequest]) (*connect_go.Response[v1.AddPlayerResponse], error)
 }
 
 // NewIngestionServiceClient constructs a client for the ingestion.v1.IngestionService service. By
@@ -58,12 +62,18 @@ func NewIngestionServiceClient(httpClient connect_go.HTTPClient, baseURL string,
 			baseURL+IngestionServiceAddFileProcedure,
 			opts...,
 		),
+		addPlayer: connect_go.NewClient[v1.AddPlayerRequest, v1.AddPlayerResponse](
+			httpClient,
+			baseURL+IngestionServiceAddPlayerProcedure,
+			opts...,
+		),
 	}
 }
 
 // ingestionServiceClient implements IngestionServiceClient.
 type ingestionServiceClient struct {
-	addFile *connect_go.Client[v1.AddFileRequest, v1.AddFileResponse]
+	addFile   *connect_go.Client[v1.AddFileRequest, v1.AddFileResponse]
+	addPlayer *connect_go.Client[v1.AddPlayerRequest, v1.AddPlayerResponse]
 }
 
 // AddFile calls ingestion.v1.IngestionService.AddFile.
@@ -71,9 +81,15 @@ func (c *ingestionServiceClient) AddFile(ctx context.Context, req *connect_go.Re
 	return c.addFile.CallUnary(ctx, req)
 }
 
+// AddPlayer calls ingestion.v1.IngestionService.AddPlayer.
+func (c *ingestionServiceClient) AddPlayer(ctx context.Context, req *connect_go.Request[v1.AddPlayerRequest]) (*connect_go.Response[v1.AddPlayerResponse], error) {
+	return c.addPlayer.CallUnary(ctx, req)
+}
+
 // IngestionServiceHandler is an implementation of the ingestion.v1.IngestionService service.
 type IngestionServiceHandler interface {
 	AddFile(context.Context, *connect_go.Request[v1.AddFileRequest]) (*connect_go.Response[v1.AddFileResponse], error)
+	AddPlayer(context.Context, *connect_go.Request[v1.AddPlayerRequest]) (*connect_go.Response[v1.AddPlayerResponse], error)
 }
 
 // NewIngestionServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -88,6 +104,11 @@ func NewIngestionServiceHandler(svc IngestionServiceHandler, opts ...connect_go.
 		svc.AddFile,
 		opts...,
 	))
+	mux.Handle(IngestionServiceAddPlayerProcedure, connect_go.NewUnaryHandler(
+		IngestionServiceAddPlayerProcedure,
+		svc.AddPlayer,
+		opts...,
+	))
 	return "/ingestion.v1.IngestionService/", mux
 }
 
@@ -96,4 +117,8 @@ type UnimplementedIngestionServiceHandler struct{}
 
 func (UnimplementedIngestionServiceHandler) AddFile(context.Context, *connect_go.Request[v1.AddFileRequest]) (*connect_go.Response[v1.AddFileResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("ingestion.v1.IngestionService.AddFile is not implemented"))
+}
+
+func (UnimplementedIngestionServiceHandler) AddPlayer(context.Context, *connect_go.Request[v1.AddPlayerRequest]) (*connect_go.Response[v1.AddPlayerResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("ingestion.v1.IngestionService.AddPlayer is not implemented"))
 }
