@@ -43,7 +43,12 @@ const (
 
 // IngestionServiceClient is a client for the ingestion.v1.IngestionService service.
 type IngestionServiceClient interface {
+	// add a given file to the ingestion queue
 	AddFile(context.Context, *connect_go.Request[v1.AddFileRequest]) (*connect_go.Response[v1.AddFileResponse], error)
+	// add a given player to the ingestion queue
+	// files included automatically are;
+	// - draft information
+	// - yearByYear information
 	AddPlayer(context.Context, *connect_go.Request[v1.AddPlayerRequest]) (*connect_go.Response[v1.AddPlayerResponse], error)
 }
 
@@ -88,7 +93,12 @@ func (c *ingestionServiceClient) AddPlayer(ctx context.Context, req *connect_go.
 
 // IngestionServiceHandler is an implementation of the ingestion.v1.IngestionService service.
 type IngestionServiceHandler interface {
+	// add a given file to the ingestion queue
 	AddFile(context.Context, *connect_go.Request[v1.AddFileRequest]) (*connect_go.Response[v1.AddFileResponse], error)
+	// add a given player to the ingestion queue
+	// files included automatically are;
+	// - draft information
+	// - yearByYear information
 	AddPlayer(context.Context, *connect_go.Request[v1.AddPlayerRequest]) (*connect_go.Response[v1.AddPlayerResponse], error)
 }
 

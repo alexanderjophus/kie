@@ -122,7 +122,11 @@ func FeatureExtract(r io.Reader, w io.Writer) error {
 	if err != nil {
 		return fmt.Errorf("error marshalling csv: %w", err)
 	}
-	w.Write([]byte(c))
+	_, err = w.Write([]byte(c))
+	if err != nil {
+		return fmt.Errorf("error writing csv: %w", err)
+	}
+
 	return nil
 }
 

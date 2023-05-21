@@ -4,6 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"os"
@@ -30,7 +31,8 @@ var rootCmd = &cobra.Command{
 }
 
 func run() error {
-	client, err := client.NewInCluster()
+	ctx := context.Background()
+	client, err := client.NewInClusterContext(ctx)
 	if err != nil {
 		return fmt.Errorf("unable to get client: %w", err)
 	}
@@ -44,13 +46,11 @@ func run() error {
 	mux := http.NewServeMux()
 	path, handler := ingestionv1connect.NewIngestionServiceHandler(s)
 	mux.Handle(path, handler)
-	http.ListenAndServe(
+	return http.ListenAndServe(
 		"localhost:8080",
 		// Use h2c so we can serve HTTP/2 without TLS.
 		h2c.NewHandler(mux, &http2.Server{}),
 	)
-
-	return nil
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

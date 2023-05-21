@@ -1,8 +1,0 @@
-go 1.20
-
-use (
-	./gen
-	./svc/cleaning
-	./svc/features
-	./svc/ingestion
-)
