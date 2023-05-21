@@ -43,3 +43,11 @@ func Test() error {
 func Docker(service string) error {
 	return sh.Run(docker, "build", "-t", service, ".", "--build-arg", "SERVICE="+service)
 }
+
+func Docs() error {
+	_, err := sh.Exec(nil, os.Stdout, os.Stderr, "mkdocs", "serve")
+	if err != nil {
+		return fmt.Errorf("docs failed: %w", err)
+	}
+	return nil
+}

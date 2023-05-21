@@ -1,0 +1,11 @@
+site_name: KIE (Knowledge Is Everything)
+theme:
+  name: material
+repo_url: https://github.com/alexanderjophus/kie
+
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
