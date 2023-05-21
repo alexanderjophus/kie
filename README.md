@@ -60,3 +60,5 @@ helm install pachd pachyderm/pachyderm -n pachd --create-namespace \
 # Apply kustomize files
 kubectl apply -k deploy/base
 ```
+
+Pipelines are still a todo item.
