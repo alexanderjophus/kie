@@ -47,3 +47,16 @@ Lastly we'll serve our model. We'll expose a gRPC/REST API that allows us to que
 - Go, absolutely everywhere - because why not?
 - Pachyderm - because it's awesome
 - gRPC/buf
+
+## Deploying
+
+### Local
+
+```sh
+# Start pachyderm
+helm install pachd pachyderm/pachyderm -n pachd --create-namespace \
+  --set deployTarget=LOCAL \
+  --set proxy.enabled=false
+# Apply kustomize files
+kubectl apply -k deploy/base
+```
