@@ -49,7 +49,6 @@ func run(inDir, outDir string) error {
 
 		outPath := filepath.Join(outDir, path)
 		outPath = changeFileExtension(outPath, "csv")
-		fmt.Printf("writing to %s\n", outPath)
 		if _, err := os.Stat(outPath); os.IsNotExist(err) {
 			if err := os.MkdirAll(filepath.Dir(outPath), 0700); err != nil {
 				return fmt.Errorf("error creating out dir: %w", err)

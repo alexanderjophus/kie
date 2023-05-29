@@ -31,7 +31,6 @@ var rootCmd = &cobra.Command{
 }
 
 func run(inDir, outDir string) error {
-	fmt.Printf("Running with inDir: %s, outDir: %s\n", inDir, outDir)
 	infs := os.DirFS(inDir)
 	if err := fs.WalkDir(infs, "api/v1/people", func(path string, _ fs.DirEntry, err error) error {
 		if err != nil {
