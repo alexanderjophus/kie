@@ -57,8 +57,9 @@ Lastly we'll serve our model. We'll expose a gRPC/REST API that allows us to que
 helm install pachd pachyderm/pachyderm -n pachd --create-namespace \
   --set deployTarget=LOCAL \
   --set proxy.enabled=false
+
+# Run the pachyderm operator (github.com/alexanderjophus/pachyderm-operator)
+
 # Apply kustomize files
 kubectl apply -k deploy/base
 ```
-
-Pipelines are still a todo item.

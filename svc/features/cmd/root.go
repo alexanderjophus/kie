@@ -13,28 +13,29 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	inDir  string
+	outDir string
+)
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "features",
 	Short: "A service for parsing features in csv's and encoding them ready for ML",
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := run(); err != nil {
+		if err := run(inDir, outDir); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
 	},
 }
 
-var (
-	inDir  = "./cleaning/"
-	outDir = "./out/"
-)
-
-func run() error {
+func run(inDir, outDir string) error {
+	fmt.Printf("Running with inDir: %s, outDir: %s\n", inDir, outDir)
 	infs := os.DirFS(inDir)
-	if err := fs.WalkDir(infs, ".", func(path string, _ fs.DirEntry, err error) error {
+	if err := fs.WalkDir(infs, "api/v1/people", func(path string, _ fs.DirEntry, err error) error {
 		if err != nil {
-			return fmt.Errorf("error walking dir: %w", err)
+			return err
 		}
 		if filepath.Ext(path) != ".csv" {
 			return nil
@@ -80,4 +81,6 @@ func Execute() {
 
 func init() {
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.Flags().StringVar(&inDir, "in-dir", "/pfs/cleaning", "Input directory")
+	rootCmd.Flags().StringVar(&outDir, "out-dir", "/pfs/out", "Output directory")
 }

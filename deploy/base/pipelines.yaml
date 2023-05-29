@@ -1,0 +1,31 @@
+kind: Pachyderm
+apiVersion: pachyderm.dejophus.dev/v1alpha1
+metadata:
+  name: cleaning
+spec:
+  name: cleaning
+  description: Cleans data
+  project: default
+  transform:
+    image: cleaning
+    cmd: ["/app"]
+  input:
+    pfs:
+      repo: statsapi
+      glob: "/api/v1/people/*"
+---
+kind: Pachyderm
+apiVersion: pachyderm.dejophus.dev/v1alpha1
+metadata:
+  name: features
+spec:
+  name: features
+  description: Extracts features
+  project: default
+  transform:
+    image: features
+    cmd: ["/app"]
+  input:
+    pfs:
+      repo: cleaning
+      glob: "/api/v1/people/*"

@@ -8,3 +8,4 @@ namespace: kie
 resources:
   - namespace.yaml
   - ingestion.yaml
+  - pipelines.yaml
